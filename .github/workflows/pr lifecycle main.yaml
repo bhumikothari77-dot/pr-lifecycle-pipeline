@@ -1,4 +1,4 @@
-Runs on every PR event:  open, update, and close (for cleanup)
+ # Runs on every PR event:  open, update, and close (for cleanup)
 on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
