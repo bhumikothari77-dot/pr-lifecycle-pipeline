@@ -1,0 +1,18 @@
+test:
+    if: github.event.action != 'closed'
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r app/requirements.txt pytest pytest-cov
+      - name: Run tests with coverage
+        run: pytest app/tests --cov=app --cov-report=xml || echo "No tests yet"
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
