@@ -1,0 +1,25 @@
+Runs on every PR event: open, update, and close (for cleanup)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches: [main]
+
+env:
+  IMAGE_NAME: yourdockerhubuser/pulseops-app
+
+jobs:
+  # ---------- 1. Lint & static checks ----------
+  lint:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install lint tools
+        run: pip install flake8 black
+      - name: Run flake8
+        run: flake8 app --max-line-length=100
+      - name: Check formatting
+        run: black --check app
